@@ -1,0 +1,3 @@
+variable,description,units,common_name,utc_min_date,utc_max_date,resolution,aggregation
+o3,1000.0*O3[1],ppbV,ozone,2011-01-01,2011-12-31,day;7day;14day,max;avg
+pm25,ATOTI[0]*PM25AT[4]+ATOTJ[0]*PM25AC[4]+ATOTK[0]*PM25CO[4],ug/m3,particulate matter,2011-01-01,2011-12-31,hour;day;7day;14day,max;avg

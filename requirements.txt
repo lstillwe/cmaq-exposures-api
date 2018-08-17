@@ -1,0 +1,7 @@
+connexion == 1.1.15
+python_dateutil == 2.6.0
+setuptools >= 21.0.0
+sqlalchemy
+geoalchemy2
+psycopg2
+pytz

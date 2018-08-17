@@ -1,0 +1,201 @@
+---
+swagger: "2.0"
+info:
+  description: "This is the DataTranslator CMAQ o3 and pm2.5 exposures API"
+  version: "1.0.0"
+  title: "CMAQ Exposures API"
+  contact:
+    name: "Lisa Stillwell"
+    email: "lisa@renci.org"
+  license:
+    name: "MIT"
+    url: "http://opensource.org/licenses/MIT"
+host: "bdt-cmaq.renci.org:8080"
+basePath: "/cmaq_exposures_api/v1"
+schemes:
+- "https"
+paths:
+  /values:
+    get:
+      summary: "CMAQ ozone (o3) and particulate matter (pm2.5) exposure values"
+      description: "By passing in the appropriate options, you can retrieve CMAQ o3\
+        \ and pm2.5 exposure values\n"
+      operationId: "get_values"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "start_date"
+        in: "query"
+        description: "start date of range, ie: MM-DD-YYYY"
+        required: true
+        type: "string"
+        format: "date"
+      - name: "end_date"
+        in: "query"
+        description: "end date of range, ie: MM-DD-YYYY"
+        required: true
+        type: "string"
+        format: "date"
+      - name: "latitude"
+        in: "query"
+        description: "latitude in decimal degrees format, ie: 35.7"
+        required: true
+        type: "string"
+      - name: "longitude"
+        in: "query"
+        description: "longitude in decimal degrees format, ie: -80.33"
+        required: true
+        type: "string"
+      - name: "resolution"
+        in: "query"
+        description: "temporal resolution (day, 7day, 14day) - default is day"
+        required: false
+        type: "string"
+        default: "day"
+      - name: "aggregation"
+        in: "query"
+        description: "numerical aggregation (max, avg) - default is max"
+        required: false
+        type: "string"
+        default: "max"
+      - name: "utc_offset"
+        in: "query"
+        description: "timezone offset from UTC (utc, eastern, central, mountain, pacific)\
+          \ - default is utc"
+        required: false
+        type: "string"
+        default: "utc"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "object"
+            properties:
+              values:
+                type: "array"
+                items:
+                  $ref: "#/definitions/inline_response_200_values"
+        400:
+          description: "Invalid parameter"
+        404:
+          description: "No values found"
+        500:
+          description: "Server error"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+definitions:
+  inline_response_200_cmaq_output:
+    properties:
+      date:
+        type: "string"
+        format: "date"
+        example: "2010-01-01"
+      value:
+        type: "number"
+        format: "float"
+        example: 49.819595
+    example:
+      date: "2010-01-01"
+      value: 49.819595
+  inline_response_200:
+    properties:
+      values:
+        type: "array"
+        items:
+          $ref: "#/definitions/inline_response_200_values"
+    example:
+      values:
+      - latitude: "35.7"
+        variable: "o3"
+        cmaq_output:
+        - date: "2010-01-01"
+          value: 49.819595
+        - date: "2010-01-01"
+          value: 49.819595
+        longitude: "-80.33"
+      - latitude: "35.7"
+        variable: "o3"
+        cmaq_output:
+        - date: "2010-01-01"
+          value: 49.819595
+        - date: "2010-01-01"
+          value: 49.819595
+        longitude: "-80.33"
+  inline_response_200_values:
+    properties:
+      variable:
+        type: "string"
+        example: "o3"
+      latitude:
+        type: "string"
+        example: "35.7"
+      longitude:
+        type: "string"
+        example: "-80.33"
+      cmaq_output:
+        type: "array"
+        items:
+          $ref: "#/definitions/inline_response_200_cmaq_output"
+    example:
+      latitude: "35.7"
+      variable: "o3"
+      cmaq_output:
+      - date: "2010-01-01"
+        value: 49.819595
+      - date: "2010-01-01"
+        value: 49.819595
+      longitude: "-80.33"
+parameters:
+  search:
+    name: "search"
+    in: "query"
+    description: "search for exposure variable like - default is empty"
+    required: false
+    type: "string"
+  start_date:
+    name: "start_date"
+    in: "query"
+    description: "start date of range"
+    required: true
+    type: "string"
+    format: "date"
+  end_date:
+    name: "end_date"
+    in: "query"
+    description: "end date of range"
+    required: true
+    type: "string"
+    format: "date"
+  latitude:
+    name: "latitude"
+    in: "query"
+    description: "latitude in decimal degrees format, ie: 35.7"
+    required: true
+    type: "string"
+  longitude:
+    name: "longitude"
+    in: "query"
+    description: "longitude in decimal degrees format, ie: -80.33"
+    required: true
+    type: "string"
+  resolution:
+    name: "resolution"
+    in: "query"
+    description: "temporal resolution (day, 7day, 14day) - default is day"
+    required: false
+    type: "string"
+    default: "day"
+  aggregation:
+    name: "aggregation"
+    in: "query"
+    description: "numerical aggregation (max, avg) - default is max"
+    required: false
+    type: "string"
+    default: "max"
+  utc_offset:
+    name: "utc_offset"
+    in: "query"
+    description: "timezone offset from UTC (utc, eastern, central, mountain, pacific)\
+      \ - default is utc"
+    required: false
+    type: "string"
+    default: "utc"

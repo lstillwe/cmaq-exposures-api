@@ -1,0 +1,17 @@
+[connexion]
+server =
+debug = True
+port = 5000
+keyfile =
+certfile =
+
+[sys-path]
+exposures = ./exposures
+controllers = ./controllers
+
+[postgres]
+host = 127.0.0.1
+port = 5432
+database = cmaq
+username = username
+password = password
