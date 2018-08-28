@@ -58,38 +58,6 @@ class CmaqExposures(object):
 
         return True, ''
 
-    def is_valid_resolution(self, **kwargs):
-        res_set = set()
-        session = Session()
-        #var_set = kwargs.get('variable').split(';')
-        var_set = {'o3', 'pm25'} ################ TODO: CHANGE THIS TO GET FULL SET FROM DB #################
-        for var in var_set:
-            res = session.query(ExposureList.resolution).filter(
-                ExposureList.variable == var).one()
-            session.close()
-            for item in res:
-                res_set.update(item.split(';'))
-            if kwargs.get('resolution') not in res_set:
-                return False
-
-        return True
-
-    def is_valid_aggregation(self, **kwargs):
-        agg_set = set()
-        session = Session()
-        #var_set = kwargs.get('variable').split(';')
-        var_set = {'o3', 'pm25'} ################ TODO: CHANGE THIS TO GET FULL SET FROM DB #################
-        for var in var_set:
-            agg = session.query(ExposureList.aggregation).filter(
-                ExposureList.variable == var).one()
-            session.close()
-            for item in agg:
-                agg_set.update(item.split(';'))
-            if kwargs.get('aggregation') not in agg_set:
-                return False
-
-        return True
-
     def is_valid_utc_offset(self, **kwargs):
         off_set = {'utc', 'eastern', 'central', 'mountain', 'pacific'}
         if kwargs.get('utc_offset') in off_set:
@@ -104,17 +72,13 @@ class CmaqExposures(object):
             return False, ('Invalid parameter', 400, {'x-error': 'Invalid parameter: start_date, end_date'})
         elif not lat_lon_valid:
             return False, msg
-        elif not self.is_valid_resolution(**kwargs):
-            return False, ('Invalid parameter', 400, {'x-error': 'Invalid parameter: resolution'})
-        elif not self.is_valid_aggregation(**kwargs):
-            return False, ('Invalid parameter', 400, {'x-error': 'Invalid parameter: aggregation'})
         elif not self.is_valid_utc_offset(**kwargs):
             return False, ('Invalid parameter', 400, {'x-error': 'Invalid parameter: utc_offset'})
         else:
             return True, ''
 
     def get_values(self, **kwargs):
-        # variable, start_date, end_date, lat_lon, resolution = None, aggregation = None, utc_offset = None
+        # variable, start_date, end_date, lat_lon, utc_offset = None
         # 'UTC', 'US/Central', 'US/Eastern','US/Mountain', 'US/Pacific'
         tzone_dict = {'utc': 'UTC',
                       'eastern': 'US/Eastern',

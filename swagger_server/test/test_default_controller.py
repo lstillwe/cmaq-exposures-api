@@ -21,8 +21,6 @@ class TestDefaultController(BaseTestCase):
                         ('end_date', '2013-10-20'),
                         ('latitude', 'latitude_example'),
                         ('longitude', 'longitude_example'),
-                        ('resolution', 'day'),
-                        ('aggregation', 'max'),
                         ('utc_offset', 'utc')]
         response = self.client.open(
             '/proximity_api/cmaq-exposures-api/1.0.0/values',
