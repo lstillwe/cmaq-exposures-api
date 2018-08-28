@@ -15,9 +15,9 @@ CREATE TEMP TABLE tmp (
 );
 
 -- copy the raw data from sample csv file
-COPY tmp FROM '/projects/datatrans/new_cmaq_data/merged_cmaq_2011.csv' DELIMITER ',' CSV HEADER ;
+COPY tmp FROM '/projects/datatrans/new_cmaq_data/merged_cmaq_2010.csv' DELIMITER ',' CSV HEADER ;
 
--- create a table to load data into named cmaq
+-- create a table to load data into named exposure_data
 CREATE TABLE IF NOT EXISTS exposure_data (
   id SERIAL UNIQUE PRIMARY KEY,
   date DATE,
@@ -31,8 +31,8 @@ CREATE TABLE IF NOT EXISTS exposure_data (
   ozone_daily_8hour_maximum_stderr FLOAT
 );
 
--- load the cmaq table with properly formatted data
-INSERT INTO cmaq (date, fips, latitude, longitude, location, pm25_daily_average, pm25_daily_average_stderr, ozone_daily_8hour_maximum, ozone_daily_8hour_maximum_stderr)
+-- load the exposure_data table with properly formatted data
+INSERT INTO exposure_data (date, fips, latitude, longitude, location, pm25_daily_average, pm25_daily_average_stderr, ozone_daily_8hour_maximum, ozone_daily_8hour_maximum_stderr)
     SELECT
       cast(date as DATE),
       cast(fips as BIGINT),
@@ -49,7 +49,7 @@ INSERT INTO cmaq (date, fips, latitude, longitude, location, pm25_daily_average,
 DROP TABLE tmp;
 
 -- set owner to datatrans user
-ALTER TABLE cmaq OWNER TO datatrans;
+ALTER TABLE exposure_data OWNER TO datatrans;
 
 -- display a sample of contents to user
-SELECT * FROM cmaq ORDER BY date ASC LIMIT 10;
+SELECT * FROM exposure_data ORDER BY date ASC LIMIT 10;
