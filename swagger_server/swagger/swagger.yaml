@@ -1,7 +1,21 @@
 ---
 swagger: "2.0"
 info:
-  description: "This is the DataTranslator CMAQ o3 and pm2.5 exposures API"
+  description: |
+    This API returns estimated air particulate exposures levels given a time period and spatial location of interest.
+
+    Estimates are derived from the EPA CONUS estimates of air quality available at https://www.epa.gov/hesc/rsig-related-downloadable-data-files. These data sets provide 8 -hour ozone daily maximums and daily PM2.5 daily averages. EPA provides estimates at the resolution of censusUS Census tract centroids, for the continental US. For a given location, this API returns the estimate for the census tract the location occurs in.
+
+    Years are 2002-2014.<br \>
+    Resolution for model estimates is 12 km, provisioned at a resolution of the US Census track centroid.
+
+    The data sets sources are derived from air quality monitoring data from the National Air Monitoring Stations and Local Air Monitoring Stations (NAMS/SLAMS) and numerical output from the Models-3/Community Multiscale Air Quality ((CMAQ - https://www.epa.gov/cmaq).
+
+    The API currently provides the following exposure variables:
+      * O3: provides estimated O3 concentration levels.  Estimated values are daily maximums in units of ug/m3.
+      * PM2.5:  provides estimated pm2.5 concentration levels.  Estimated values are daily averages in units of parts per billion by volume (ppbV).
+
+    Locations are expressed using WGS84 decimal format. WGS84 is the World Geodetic System for expressing latitude and longitude.  For example, the Statue of Liberty in New York City is at latitude 40.689249 and longitude -74.044500.
   version: "1.0.0"
   title: "CMAQ Exposures API"
   contact:
@@ -17,9 +31,9 @@ schemes:
 paths:
   /values:
     get:
-      summary: "CMAQ ozone (o3) and particulate matter (pm2.5) exposure values"
-      description: "By passing in the appropriate options, you can retrieve CMAQ o3\
-        \ and pm2.5 exposure values\n"
+      summary: "Retrieves air pollutant exposure levels"
+      description: |
+        Get estimated air pollutant exposure levels based on time and location
       operationId: "get_values"
       produces:
       - "application/json"
