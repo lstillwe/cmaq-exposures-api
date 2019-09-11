@@ -6,7 +6,7 @@ info:
 
     Estimates are derived from the US EPA CONUS estimates of air quality available at https://www.epa.gov/hesc/rsig-related-downloadable-data-files. These data sets provide 8-hour ozone daily maximums (in ppbV) and daily PM2.5 daily averages (in µg/m3). The US EPA provides estimates at the resolution of US Census tract centroids for the continental US. For a given location, the API returns the estimated exposure for the census tract the location occurs in.
 
-    The API provides exposure estimates for calendar years 2002-2014. Resolution for model estimates is 12 km-squared, provisioned at a resolution of the US Census track centroid. The US census tract definition is from the calendar year 2010 definition of the US Census Bureau, for all years of CMAQ data.
+    The API provides exposure estimates for calendar years 2002-2016. Resolution for model estimates is 12 km-squared, provisioned at a resolution of the US Census track centroid. The US census tract definition is from the calendar year 2010 definition of the US Census Bureau, for all years of CMAQ data.
 
     The data sets sources are derived from air quality monitoring data from the National Air Monitoring Stations and Local Air Monitoring Stations (NAMS/LAMS) and numerical output from the Models-3/Community Multiscale Air Quality (CMAQ - https://www.epa.gov/cmaq).
     The API currently provides the following exposure variables:
@@ -96,35 +96,11 @@ definitions:
     example:
       date: "2010-01-01"
       value: 49.819595
-  inline_response_200:
-    properties:
-      values:
-        type: "array"
-        items:
-          $ref: "#/definitions/inline_response_200_values"
-    example:
-      values:
-      - latitude: "35.7"
-        variable: "o3"
-        cmaq_output:
-        - date: "2010-01-01"
-          value: 49.819595
-        - date: "2010-01-01"
-          value: 49.819595
-        longitude: "-80.33"
-      - latitude: "35.7"
-        variable: "o3"
-        cmaq_output:
-        - date: "2010-01-01"
-          value: 49.819595
-        - date: "2010-01-01"
-          value: 49.819595
-        longitude: "-80.33"
   inline_response_200_values:
     properties:
       variable:
         type: "string"
-        example: "o3"
+        example: "ozone_daily_8hour_maximum"
       latitude:
         type: "string"
         example: "35.7"
@@ -136,14 +112,26 @@ definitions:
         items:
           $ref: "#/definitions/inline_response_200_cmaq_output"
     example:
-      latitude: "35.7"
-      variable: "o3"
-      cmaq_output:
-      - date: "2010-01-01"
-        value: 49.819595
-      - date: "2010-01-01"
-        value: 49.819595
-      longitude: "-80.33"
+      - latitude: "35.7"
+        variable: "pm25_daily_average"
+        cmaq_output:
+        - date: "2016-12-29"
+          value: 5.4092
+        - date: "2016-12-30"
+          value: 2.1874
+        - date: "2016-12-31"
+          value: 8.824
+        longitude: "-80.33"
+      - latitude: "35.7"
+        variable: "ozone_daily_8hour_maximum"
+        cmaq_output:
+        - date: "2016-12-29"
+          value: 39.6909
+        - date: "2016-12-30"
+          value: 36.532
+        - date: "2016-12-31"
+          value: 31.5859
+        longitude: "-80.33"
 parameters:
   search:
     name: "search"

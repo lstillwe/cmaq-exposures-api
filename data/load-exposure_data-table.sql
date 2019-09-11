@@ -3,11 +3,12 @@
 -- 2011/01/01,1001020100,-86.49001,32.47718,4.925,3.8543,31.603,6.2108
 
 -- create a temporary table for holding the raw data
+-- NOTE: Lon,Lat flipped in 2015, 2016 CMAQ data
 CREATE TEMP TABLE tmp (
     date TEXT,
     fips TEXT,
-    lon TEXT,
     lat TEXT,
+    lon TEXT,
     pm25 TEXT,
     pm25_err TEXT,
     o3 TEXT,
@@ -15,7 +16,7 @@ CREATE TEMP TABLE tmp (
 );
 
 -- copy the raw data from sample csv file
-COPY tmp FROM '/projects/datatrans/new_cmaq_data/merged_cmaq_2010.csv' DELIMITER ',' CSV HEADER ;
+COPY tmp FROM '/projects/datatrans/new_cmaq_data/merged_cmaq_2016.csv' DELIMITER ',' CSV HEADER ;
 
 -- create a table to load data into named exposure_data
 CREATE TABLE IF NOT EXISTS exposure_data (
