@@ -1,175 +1,192 @@
 ---
-swagger: "2.0"
+openapi: 3.0.0
+tags:
+  - name: translator
 info:
   description: |
     This API returns estimated measurements of airborne particulate exposures for a given time period and spatial location of interest.
 
-    Estimates are derived from the US EPA CONUS estimates of air quality available at https://www.epa.gov/hesc/rsig-related-downloadable-data-files. These data sets provide 8-hour ozone daily maximums (in ppbV) and daily PM2.5 daily averages (in µg/m3). The US EPA provides estimates at the resolution of US Census tract centroids for the continental US. For a given location, the API returns the estimated exposure for the census tract the location occurs in.
+    Estimates are derived from the US EPA CONUS estimates of air quality available at https://www.epa.gov/hesc/rsig-related-downloadable-data-files. These data sets provide 8-hour ozone daily maximums (in ppbV) and daily PM2.5 daily averages (in µg/m3). The US EPA provides estimates at the resolution of US Census tract centroids for the continental US. For a given location, the API returns the estimated exposure for the census tract the location occurs in.
 
     The API provides exposure estimates for calendar years 2002-2016. Resolution for model estimates is 12 km-squared, provisioned at a resolution of the US Census track centroid. The US census tract definition is from the calendar year 2010 definition of the US Census Bureau, for all years of CMAQ data.
 
-    The data sets sources are derived from air quality monitoring data from the National Air Monitoring Stations and Local Air Monitoring Stations (NAMS/LAMS) and numerical output from the Models-3/Community Multiscale Air Quality (CMAQ - https://www.epa.gov/cmaq).
+    The data sets sources are derived from air quality monitoring data from the National Air Monitoring Stations and Local Air Monitoring Stations (NAMS/LAMS) and numerical output from the Models-3/Community Multiscale Air Quality (CMAQ - https://www.epa.gov/cmaq).
+
     The API currently provides the following exposure variables:
-      * O3: provides estimated O3 concentration levels. Estimated values are for daily maximums in units of ppbV.
-      * PM2.5: provides estimated pm2.5 concentration levels. Estimated values are for daily averages in units of µg/m3.
+    - O3: provides estimated O3 concentration levels. Estimated values are for daily maximums in units of ppbV.
+    - PM2.5: provides estimated pm2.5 concentration levels. Estimated values are for daily averages in units of µg/m3.
 
     Locations are expressed using WGS84 decimal format. WGS84 is the World Geodetic System for expressing latitude and longitude. For example, Raleigh, North Carolina is at latitude 35.7796 and longitude -78.6382.
-  version: "1.0.0"
-  title: "CMAQ Exposures API"
+
+  version: 1.0.0-oas3
+  title: CMAQ Exposures API
   contact:
-    name: "Lisa Stillwell"
-    email: "lisa@renci.org"
+    name: Lisa Stillwell
+    email: lisa@renci.org
   license:
-    name: "MIT"
-    url: "http://opensource.org/licenses/MIT"
-host: "bdt-cmaq.renci.org:8080"
-basePath: "/cmaq_exposures_api/v1"
-schemes:
-- "https"
+    name: MIT
+    url: 'http://opensource.org/licenses/MIT'
 paths:
   /values:
     get:
-      summary: "Retrieves air pollutant exposure levels"
+      summary: Retrieves air pollutant exposure levels
       description: |
         Get estimated air pollutant exposure levels based on time and location
-      operationId: "get_values"
-      produces:
-      - "application/json"
+      operationId: get_values
       parameters:
-      - name: "start_date"
-        in: "query"
-        description: "start date of range, ie: MM-DD-YYYY"
-        required: true
-        type: "string"
-        format: "date"
-      - name: "end_date"
-        in: "query"
-        description: "end date of range, ie: MM-DD-YYYY"
-        required: true
-        type: "string"
-        format: "date"
-      - name: "latitude"
-        in: "query"
-        description: "latitude in decimal degrees format, ie: 35.7"
-        required: true
-        type: "string"
-      - name: "longitude"
-        in: "query"
-        description: "longitude in decimal degrees format, ie: -80.33"
-        required: true
-        type: "string"
-      - name: "utc_offset"
-        in: "query"
-        description: "timezone offset from UTC (utc, eastern, central, mountain, pacific)\
-          \ - default is utc"
-        required: false
-        type: "string"
-        default: "utc"
-      responses:
-        200:
-          description: "OK"
+        - name: start_date
+          in: query
+          description: 'start date of range, ie: MM-DD-YYYY'
+          required: true
           schema:
-            type: "object"
-            properties:
-              values:
-                type: "array"
-                items:
-                  $ref: "#/definitions/inline_response_200_values"
-        400:
-          description: "Invalid parameter"
-        404:
-          description: "No values found"
-        500:
-          description: "Server error"
-      x-swagger-router-controller: "swagger_server.controllers.default_controller"
-definitions:
-  inline_response_200_cmaq_output:
-    properties:
-      date:
-        type: "string"
-        format: "date"
-        example: "2010-01-01"
-      value:
-        type: "number"
-        format: "float"
-        example: 49.819595
-    example:
-      date: "2010-01-01"
-      value: 49.819595
-  inline_response_200_values:
-    properties:
-      variable:
-        type: "string"
-        example: "ozone_daily_8hour_maximum"
-      latitude:
-        type: "string"
-        example: "35.7"
-      longitude:
-        type: "string"
-        example: "-80.33"
-      cmaq_output:
-        type: "array"
-        items:
-          $ref: "#/definitions/inline_response_200_cmaq_output"
-    example:
-      - latitude: "35.7"
-        variable: "pm25_daily_average"
+            type: string
+            format: date
+        - name: end_date
+          in: query
+          description: 'end date of range, ie: MM-DD-YYYY'
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: latitude
+          in: query
+          description: 'latitude in decimal degrees format, ie: 35.7'
+          required: true
+          schema:
+            type: string
+        - name: longitude
+          in: query
+          description: 'longitude in decimal degrees format, ie: -80.33'
+          required: true
+          schema:
+            type: string
+        - name: utc_offset
+          in: query
+          description: >-
+            timezone offset from UTC (utc, eastern, central, mountain, pacific)
+            - default is utc
+          required: false
+          schema:
+            type: string
+            default: utc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  values:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/inline_response_200_values'
+        '400':
+          description: Invalid parameter
+        '404':
+          description: No values found
+        '500':
+          description: Server error
+      x-openapi-router-controller: swagger_server.controllers.default_controller
+servers:
+  - url: 'https://bdt-cmaq.renci.org:8080/cmaq_exposures_api/v1'
+  - url: 'http://bdt-cmaq.renci.org:8080/cmaq_exposures_api/v1'
+components:
+  parameters:
+    search:
+      name: search
+      in: query
+      description: search for exposure variable like - default is empty
+      required: false
+      schema:
+        type: string
+    start_date:
+      name: start_date
+      in: query
+      description: start date of range
+      required: true
+      schema:
+        type: string
+        format: date
+    end_date:
+      name: end_date
+      in: query
+      description: end date of range
+      required: true
+      schema:
+        type: string
+        format: date
+    latitude:
+      name: latitude
+      in: query
+      description: 'latitude in decimal degrees format, ie: 35.7'
+      required: true
+      schema:
+        type: string
+    longitude:
+      name: longitude
+      in: query
+      description: 'longitude in decimal degrees format, ie: -80.33'
+      required: true
+      schema:
+        type: string
+    utc_offset:
+      name: utc_offset
+      in: query
+      description: >-
+        timezone offset from UTC (utc, eastern, central, mountain, pacific) -
+        default is utc
+      required: false
+      schema:
+        type: string
+        default: utc
+  schemas:
+    inline_response_200_cmaq_output:
+      properties:
+        date:
+          type: string
+          format: date
+          example: '2010-01-01'
+        value:
+          type: number
+          format: float
+          example: 49.819595
+      example:
+        date: '2010-01-01'
+        value: 49.819595
+    inline_response_200_values:
+      properties:
+        variable:
+          type: string
+          example: ozone_daily_8hour_maximum
+        latitude:
+          type: string
+          example: '35.7'
+        longitude:
+          type: string
+          example: '-80.33'
         cmaq_output:
-        - date: "2016-12-29"
-          value: 5.4092
-        - date: "2016-12-30"
-          value: 2.1874
-        - date: "2016-12-31"
-          value: 8.824
-        longitude: "-80.33"
-      - latitude: "35.7"
-        variable: "ozone_daily_8hour_maximum"
-        cmaq_output:
-        - date: "2016-12-29"
-          value: 39.6909
-        - date: "2016-12-30"
-          value: 36.532
-        - date: "2016-12-31"
-          value: 31.5859
-        longitude: "-80.33"
-parameters:
-  search:
-    name: "search"
-    in: "query"
-    description: "search for exposure variable like - default is empty"
-    required: false
-    type: "string"
-  start_date:
-    name: "start_date"
-    in: "query"
-    description: "start date of range"
-    required: true
-    type: "string"
-    format: "date"
-  end_date:
-    name: "end_date"
-    in: "query"
-    description: "end date of range"
-    required: true
-    type: "string"
-    format: "date"
-  latitude:
-    name: "latitude"
-    in: "query"
-    description: "latitude in decimal degrees format, ie: 35.7"
-    required: true
-    type: "string"
-  longitude:
-    name: "longitude"
-    in: "query"
-    description: "longitude in decimal degrees format, ie: -80.33"
-    required: true
-    type: "string"
-  utc_offset:
-    name: "utc_offset"
-    in: "query"
-    description: "timezone offset from UTC (utc, eastern, central, mountain, pacific)\
-      \ - default is utc"
-    required: false
-    type: "string"
-    default: "utc"
+          type: array
+          items:
+            $ref: '#/components/schemas/inline_response_200_cmaq_output'
+      example:
+        - latitude: '35.7'
+          variable: pm25_daily_average
+          cmaq_output:
+            - date: '2016-12-29'
+              value: 5.4092
+            - date: '2016-12-30'
+              value: 2.1874
+            - date: '2016-12-31'
+              value: 8.824
+          longitude: '-80.33'
+        - latitude: '35.7'
+          variable: ozone_daily_8hour_maximum
+          cmaq_output:
+            - date: '2016-12-29'
+              value: 39.6909
+            - date: '2016-12-30'
+              value: 36.532
+            - date: '2016-12-31'
+              value: 31.5859
+          longitude: '-80.33'
