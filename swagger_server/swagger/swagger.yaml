@@ -1,7 +1,7 @@
 ---
 openapi: 3.0.0
 tags:
-  - name: translator
+  - name: metadata
 info:
   description: |
     This API returns estimated measurements of airborne particulate exposures for a given time period and spatial location of interest.
@@ -89,8 +89,8 @@ paths:
           description: Server error
       x-openapi-router-controller: swagger_server.controllers.default_controller
 servers:
-  - url: 'https://bdt-cmaq.renci.org:8080/cmaq_exposures_api/v1'
-  - url: 'http://bdt-cmaq.renci.org:8080/cmaq_exposures_api/v1'
+  - url: 'https://bdt-cmaq.renci.org/cmaq_exposures_api/v1'
+  - url: 'http://bdt-cmaq.renci.org/cmaq_exposures_api/v1'
 components:
   parameters:
     search:
